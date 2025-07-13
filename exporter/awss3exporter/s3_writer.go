@@ -32,7 +32,14 @@ type RecalculateV4Signature struct {
 func (lt *RecalculateV4Signature) RoundTrip(req *http.Request) (*http.Response, error) {
 	val := req.Header.Get("Accept-Encoding")
 	req.Header.Del("Accept-Encoding")
+
+	req.Header.Del("Content-Encoding")
+	req.Header.Del("X-Amz-Storage-Class")
+	req.Header.Del("X-Amz-Content-Sha256")
+
 	timeString := req.Header.Get("X-Amz-Date")
+	req.Header.Del("X-Amz-Date")
+
 	timeDate, _ := time.Parse("20060102T150405Z", timeString)
 	creds, _ := lt.cfg.Credentials.Retrieve(req.Context())
 	err := lt.signer.SignHTTP(req.Context(), creds, req, v4.GetPayloadHash(req.Context()), "s3", lt.cfg.Region, timeDate)
