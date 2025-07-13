@@ -35,10 +35,8 @@ func (lt *RecalculateV4Signature) RoundTrip(req *http.Request) (*http.Response, 
 
 	req.Header.Del("Content-Encoding")
 	req.Header.Del("X-Amz-Storage-Class")
-	req.Header.Del("X-Amz-Content-Sha256")
 
 	timeString := req.Header.Get("X-Amz-Date")
-	req.Header.Del("X-Amz-Date")
 
 	timeDate, _ := time.Parse("20060102T150405Z", timeString)
 	creds, _ := lt.cfg.Credentials.Retrieve(req.Context())
@@ -47,7 +45,9 @@ func (lt *RecalculateV4Signature) RoundTrip(req *http.Request) (*http.Response, 
 		return nil, err
 	}
 	req.Header.Set("Accept-Encoding", val)
-	fmt.Println("AfterAdjustment")
+	req.Header.Del("X-Amz-Content-Sha256")
+
+	fmt.Println("\n\nAfterAdjustment")
 	rrr, _ := httputil.DumpRequest(req, false)
 	fmt.Println(string(rrr))
 	return lt.next.RoundTrip(req)
