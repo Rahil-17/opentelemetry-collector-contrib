@@ -45,7 +45,6 @@ func (lt *RecalculateV4Signature) RoundTrip(req *http.Request) (*http.Response, 
 		return nil, err
 	}
 	req.Header.Set("Accept-Encoding", val)
-	req.Header.Del("X-Amz-Content-Sha256")
 
 	fmt.Println("\n\nAfterAdjustment")
 	rrr, _ := httputil.DumpRequest(req, false)
