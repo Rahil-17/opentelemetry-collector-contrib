@@ -7,8 +7,6 @@ import (
 	"bytes"
 	"compress/gzip"
 	"context"
-	"fmt"
-	"strings"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
@@ -56,14 +54,6 @@ func (sw *s3manager) Upload(ctx context.Context, data []byte) error {
 	}
 
 	now := clock.Now(ctx)
-	fmt.Printf("\n\n SW Struct =======> \n%#v\n", sw)
-	key := sw.builder.Build(now)
-	fmt.Println("Uploading to S3 key:", key)
-	if strings.Contains(key, "%3D") {
-		fmt.Println("⚠️ Key is URL-encoded! This will break GCS signature validation.")
-	}
-	fmt.Printf("S3 PutObjectInput:\nBucket: %s\nKey: %s\nContentEncoding: %s\nStorageClass: %s\n",
-		sw.bucket, key, encoding, string(sw.storageClass))
 
 	_, err = sw.uploader.Upload(ctx, &s3.PutObjectInput{
 		Bucket:          aws.String(sw.bucket),

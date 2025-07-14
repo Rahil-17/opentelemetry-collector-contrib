@@ -45,7 +45,6 @@ type PartitionKeyBuilder struct {
 }
 
 func (pki *PartitionKeyBuilder) Build(ts time.Time) string {
-	fmt.Printf("\n\n KEY BUILDER ====> ", pki.bucketKeyPrefix(ts), "/", pki.fileName())
 	return pki.bucketKeyPrefix(ts) + "/" + pki.fileName()
 }
 

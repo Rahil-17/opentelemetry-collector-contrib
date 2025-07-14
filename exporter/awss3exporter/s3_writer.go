@@ -5,9 +5,7 @@ package awss3exporter // import "github.com/open-telemetry/opentelemetry-collect
 
 import (
 	"context"
-	"fmt"
 	"net/http"
-	"net/http/httputil"
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -46,9 +44,6 @@ func (lt *RecalculateV4Signature) RoundTrip(req *http.Request) (*http.Response, 
 	}
 	req.Header.Set("Accept-Encoding", val)
 
-	fmt.Println("\n\nAfterAdjustment")
-	rrr, _ := httputil.DumpRequest(req, false)
-	fmt.Println(string(rrr))
 	return lt.next.RoundTrip(req)
 }
 
