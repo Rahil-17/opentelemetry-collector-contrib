@@ -45,15 +45,16 @@ type PartitionKeyBuilder struct {
 }
 
 func (pki *PartitionKeyBuilder) Build(ts time.Time) string {
+	fmt.Printf("\n\n KEY BUILDER ====> ", pki.bucketKeyPrefix(ts), "/", pki.fileName())
 	return pki.bucketKeyPrefix(ts) + "/" + pki.fileName()
 }
 
 func (pki *PartitionKeyBuilder) bucketKeyPrefix(ts time.Time) string {
-	key := fmt.Sprintf("year=%d/month=%02d/day=%02d/hour=%02d", ts.Year(), ts.Month(), ts.Day(), ts.Hour())
+	key := fmt.Sprintf("%d/%02d/%02d/%02d", ts.Year(), ts.Month(), ts.Day(), ts.Hour())
 
 	switch pki.PartitionTruncation {
 	case "minute":
-		key += "/" + fmt.Sprintf("minute=%02d", ts.Minute())
+		key += "/" + fmt.Sprintf("%02d", ts.Minute())
 	default:
 		// Nothing to do, key defaults to hourly
 	}
